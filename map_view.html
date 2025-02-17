@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDM results of mammals</title>
+    <style>
+        /* Set the body and html height to 100% to allow percentage-based height */
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		/* Basic styling for the iframe and dropdown */
+		#map-container {
+			display: flex;
+			justify-content: center; /* 水平置中 */
+			align-items: center; /* 垂直置中（如果需要） */
+			width: 100vw;  /* 佔據整個視窗的寬度 */
+			height: 90vh;  /* 佔據視窗高度的 90% */
+    }
+        iframe {
+            width: 98%;
+            height: 100%;
+            border: none;
+			margin: 1%;
+			display: block;
+        }
+		/* Style the dropdown selector */
+		#map-select {
+			font-family: Arial, sans-serif; /* Change font */
+			font-size: 24px;               /* Adjust font size */
+			height: auto;                  /* Let height be flexible */
+            overflow-y: scroll;            /* Allow scrolling for dropdown */
+		}
+		/* Style the label */
+		label {
+		font-family: Arial;
+		}
+		/* Adjust position of title and selector */
+		.container {
+        margin-left: 50px; 
+    }
+	#map-container {
+        display: flex;
+        justify-content: center; /* 水平置中 */
+        align-items: center; /* 垂直置中（如果需要） */
+        width: 100vw;  /* 佔據整個視窗的寬度 */
+        height: 90vh;  /* 佔據視窗高度的 90% */
+    }
+    </style>
+</head>
+<body>
+	<div class="container">
+		<h1>SDM Results of Butterflys</h1>
+    
+		<label for="family-select">Select Family:</label>
+		<select id="family-select">
+			<option value="">-- Select Family --</option>
+		</select>
+
+		<label for="species-select">Select Species:</label>
+		<select id="species-select" onchange="changeMap()">
+			<option value="">-- Select Species --</option>
+		</select>
+	</div>
+
+    <div id="map-container">
+        <iframe id="map-frame" src="" style="width: 95%; height: 600px;"></iframe>
+    </div>
+
+    <script>
+        const familySelect = document.getElementById("family-select");
+        const speciesSelect = document.getElementById("species-select");
+        const mapFrame = document.getElementById("map-frame");
+
+        let speciesData = {}; // 存放科名對應的物種及 HTML 路徑
+
+        // 讀取 CSV 並處理數據
+        async function loadCSV() {
+            try {
+                const response = await fetch("sp_table.csv"); // 確保 CSV 在相同目錄
+                const data = await response.text();
+                const rows = data.trim().split("\n").slice(1); // 去掉標題行
+                
+                speciesData = {}; // 初始化
+                
+                rows.forEach(row => {
+                    const [family, species, path] = row.split(",");
+                    if (!speciesData[family]) {
+                        speciesData[family] = [];
+                    }
+                    speciesData[family].push({ species, path });
+                });
+
+                populateFamilySelector();
+            } catch (error) {
+                console.error("Error loading CSV:", error);
+            }
+        }
+
+        // 填充科名下拉選單
+        function populateFamilySelector() {
+            Object.keys(speciesData).forEach(family => {
+                let option = document.createElement("option");
+                option.value = family;
+                option.textContent = family;
+                familySelect.appendChild(option);
+            });
+        }
+
+        // 當科名變更時，更新物種選單
+        familySelect.addEventListener("change", function () {
+            const selectedFamily = this.value;
+            speciesSelect.innerHTML = '<option value="">-- Select Species --</option>'; // 重設選項
+
+            if (selectedFamily && speciesData[selectedFamily]) {
+                speciesData[selectedFamily].forEach(({ species, path }) => {
+                    let option = document.createElement("option");
+                    option.value = path;
+                    option.textContent = species;
+                    speciesSelect.appendChild(option);
+                });
+            }
+        });
+
+        // 變更 `<iframe>` 內容
+        function changeMap() {
+            const selectedPath = speciesSelect.value;
+            if (selectedPath) {
+                mapFrame.src = selectedPath;
+            }
+        }
+
+        // 頁面載入時讀取 CSV
+        loadCSV();
+    </script>
+</body>
+</html>
