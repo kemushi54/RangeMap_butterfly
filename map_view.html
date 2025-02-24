@@ -6,18 +6,15 @@
     <title>SDM results of butterflies</title>
     <style>
         /* Set the body and html height to 100% to allow percentage-based height */
-		html, body {
-			height: 100%;
-			margin: 0;
-		}
-		/* Basic styling for the iframe and dropdown */
-		#map-container {
-			display: flex;
-			justify-content: center; /* 水平置中 */
-			align-items: center; /* 垂直置中（如果需要） */
-			width: 100vw;  /* 佔據整個視窗的寬度 */
-			height: 90vh;  /* 佔據視窗高度的 90% */
-    }
+	html, body {
+		height: 100%;
+		margin: 0;
+	}
+	/* Adjust position of title and selector */
+	.container {
+		margin-left: 50px; 
+    	}
+	/* Basic styling for the iframe and dropdown */
         iframe {
             width: 98%;
             height: 100%;
@@ -25,28 +22,25 @@
 			margin: 1%;
 			display: block;
         }
-		/* Style the dropdown selector */
-		#map-select {
-			font-family: Arial, sans-serif; /* Change font */
-			font-size: 24px;               /* Adjust font size */
-			height: auto;                  /* Let height be flexible */
-            overflow-y: scroll;            /* Allow scrolling for dropdown */
-		}
-		/* Style the label */
-		label {
+	/* Style the dropdown selector */
+	#map-select {
+		font-family: Arial, sans-serif; /* Change font */
+		font-size: 24px;               /* Adjust font size */
+		height: auto;                  /* Let height be flexible */
+    		overflow-y: scroll;            /* Allow scrolling for dropdown */
+	}
+	/* Style the label */
+	label {
 		font-family: Arial;
-		}
-		/* Adjust position of title and selector */
-		.container {
-        margin-left: 50px; 
-    }
-	#map-container {
-        display: flex;
-        justify-content: center; /* 水平置中 */
-        align-items: center; /* 垂直置中（如果需要） */
-        width: 100%;  /* 佔據整個視窗的寬度 */
-        height: 100%;  /* 佔據視窗高度的 90% */
-    }
+	}
+    	#map-container {
+		display: flex;
+		justify-content: center; /* 水平置中 */
+		align-items: center; /* 垂直置中 */
+		width: 90vw;  /* 佔據整個視窗寬度的90% */
+		height: 85vh;  /* 佔據視窗高度的 85% */
+	}
+
     </style>
 </head>
 <body>
